@@ -22,10 +22,14 @@ function TopicPage() {
   const visual = visuals[topicId];
 
   const topic = topics.find(
-    (item) => item.id === topicId && item.courseId === courseId,
-  );
+  (item) =>
+    String(item.id) === String(topicId) &&
+    String(item.courseId) === String(courseId),
+);
 
-  const courseTopics = topics.filter((item) => item.courseId === courseId);
+  const courseTopics = topics.filter(
+  (item) => String(item.courseId) === String(courseId)
+);
 
   const currentTopicIndex = courseTopics.findIndex(
     (item) => item.id === topicId,

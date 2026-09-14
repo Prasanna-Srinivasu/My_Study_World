@@ -1,41 +1,36 @@
-import { useNavigate } from "react-router-dom";
 import "./CourseCard.css";
 
-function CourseCard({ course }) {
-  const navigate = useNavigate();
-
-  const handleClick = () => {
-    navigate(`/course/${course.id}`);
-  };
-
+function CourseCard({ course, onClick }) {
   return (
-    <button className="course-card" onClick={handleClick}>
-      <div className="course-card-top">
+    <div
+      className="course-card"
+      onClick={() => onClick(course)}
+    >
+      <div className="course-card-content">
         <div className="course-icon">
           {course.icon || "📚"}
         </div>
 
-        <span className="course-level">
-          {course.level || "Beginner"}
-        </span>
-      </div>
+        <div className="course-info">
+          <h2>{course.name || course.title}</h2>
 
-      <div className="course-card-content">
-        <h3>{course.title}</h3>
-
-        <p>{course.description}</p>
-      </div>
-
-      <div className="course-card-progress">
-        <div className="progress-info">
-          <span>Progress</span>
-
-          <strong>
-            {course.progress || 0}%
-          </strong>
+          <p>
+            {course.description ||
+              "Learn this course step by step with concepts, practice, and interview preparation."}
+          </p>
         </div>
 
-        <div className="progress-track">
+        <div className="course-stats">
+          <span>
+            📖 {course.topics || 0} Topics
+          </span>
+
+          <span>
+            📊 {course.progress || 0}% Complete
+          </span>
+        </div>
+
+        <div className="progress-bar">
           <div
             className="progress-fill"
             style={{
@@ -43,18 +38,18 @@ function CourseCard({ course }) {
             }}
           />
         </div>
-      </div>
 
-      <div className="course-card-bottom">
-        <span>
-          {course.topics || 0} Topics
-        </span>
-
-        <span className="course-arrow">
-          →
-        </span>
+        <button
+          className="view-course-btn"
+          onClick={(event) => {
+            event.stopPropagation();
+            onClick(course);
+          }}
+        >
+          View Course →
+        </button>
       </div>
-    </button>
+    </div>
   );
 }
 

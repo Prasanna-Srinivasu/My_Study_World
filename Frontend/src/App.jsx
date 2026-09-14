@@ -3,6 +3,7 @@ import "./App.css";
 
 import Navbar from "./components/layout/Navbar/Navbar.jsx";
 import Sidebar from "./components/layout/Sidebar/Sidebar.jsx";
+import Login from "./pages/Login/Login";
 
 import Home from "./pages/Home/Home.jsx";
 import Learn from "./pages/Learn/Learn.jsx";
@@ -37,6 +38,7 @@ function App() {
               path="/topic/:courseId/:topicId"
               element={<TopicPage />}
             />
+            <Route path="/login" element={<Login />} />
 
             {/* Other sections */}
             <Route path="/practice" element={<Practice />} />

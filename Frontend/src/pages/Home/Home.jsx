@@ -1,6 +1,7 @@
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-import { courses } from "../../data/courses";
+import { getCourses } from "../../services/courseService";
 import { topics } from "../../data/topics";
 
 import CourseCard from "../../components/learning/CourseCard/CourseCard";
@@ -9,6 +10,28 @@ import "./Home.css";
 
 function Home() {
   const navigate = useNavigate();
+
+  // Courses coming from Spring Boot
+  const [courses, setCourses] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+
+  // Fetch courses from backend
+  useEffect(() => {
+    async function loadCourses() {
+      try {
+        const data = await getCourses();
+        setCourses(data);
+      } catch (err) {
+        console.error("Failed to load courses:", err);
+        setError("Unable to load courses.");
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    loadCourses();
+  }, []);
 
   const studyProgress = JSON.parse(
     localStorage.getItem("studyProgress") || "{}"
@@ -22,32 +45,42 @@ function Home() {
 
   const overallProgress =
     totalTopics > 0
+      ? Math.round((completedTopics / totalTopics) * 100)
+      : 0;
+
+  const courseNameMap = {
+  1: "java-full-stack",
+  2: "spring-boot",
+  3: "react",
+  4: "sql",
+  5: "dsa",
+};
+
+const coursesWithData = courses.map((course) => {
+  const mappedCourseId =
+    courseNameMap[course.id] || course.id;
+
+  const courseTopics = topics.filter(
+    (topic) =>
+      String(topic.courseId) === String(mappedCourseId)
+  );
+
+  const completed =
+    studyProgress[mappedCourseId]?.length || 0;
+
+  const progress =
+    courseTopics.length > 0
       ? Math.round(
-          (completedTopics / totalTopics) * 100
+          (completed / courseTopics.length) * 100
         )
       : 0;
 
-  const coursesWithData = courses.map((course) => {
-    const courseTopics = topics.filter(
-      (topic) => topic.courseId === course.id
-    );
-
-    const completed =
-      studyProgress[course.id]?.length || 0;
-
-    const progress =
-      courseTopics.length > 0
-        ? Math.round(
-            (completed / courseTopics.length) * 100
-          )
-        : 0;
-
-    return {
-      ...course,
-      topics: courseTopics.length,
-      progress,
-    };
-  });
+  return {
+    ...course,
+    topics: courseTopics.length,
+    progress,
+  };
+});
 
   const handleCourseClick = (course) => {
     navigate(`/course/${course.id}`);
@@ -97,7 +130,6 @@ function Home() {
 
         </section>
 
-
         {/* STATS */}
 
         <section className="home-stats">
@@ -127,7 +159,6 @@ function Home() {
           </div>
 
         </section>
-
 
         {/* COURSES */}
 
@@ -159,20 +190,29 @@ function Home() {
 
           <div className="home-courses-grid">
 
-            {coursesWithData
-              .slice(0, 3)
-              .map((course) => (
-                <CourseCard
-                  key={course.id}
-                  course={course}
-                  onClick={handleCourseClick}
-                />
-              ))}
+            {loading && (
+              <p>Loading courses...</p>
+            )}
+
+            {!loading && error && (
+              <p>{error}</p>
+            )}
+
+            {!loading &&
+              !error &&
+              coursesWithData
+                .slice(0, 3)
+                .map((course) => (
+                  <CourseCard
+                    key={course.id}
+                    course={course}
+                    onClick={handleCourseClick}
+                  />
+                ))}
 
           </div>
 
         </section>
-
 
         {/* FEATURES */}
 
