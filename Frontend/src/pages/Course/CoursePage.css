@@ -1,0 +1,290 @@
+.course-page {
+  width: 100%;
+}
+
+.course-page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+}
+
+.course-page-badge {
+  display: inline-block;
+  padding: 7px 13px;
+  border-radius: 20px;
+
+  color: #69c6e8;
+  background: rgba(18, 78, 102, 0.3);
+  border: 1px solid rgba(79, 169, 207, 0.25);
+
+  font-size: 12px;
+  margin-bottom: 12px;
+}
+
+.course-page-header h1 {
+  color: #ffffff;
+  font-size: 34px;
+  margin-bottom: 8px;
+}
+
+.course-page-header p {
+  color: var(--text-secondary);
+  font-size: 14px;
+}
+
+.course-progress-box {
+  min-width: 130px;
+  padding: 18px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  border-radius: 16px;
+
+  background: linear-gradient(
+    145deg,
+    #2e3944,
+    #212a31
+  );
+
+  box-shadow: var(--shadow-3d);
+}
+
+.course-progress-box strong {
+  color: #62bde0;
+  font-size: 28px;
+}
+
+.course-progress-box span {
+  color: var(--text-secondary);
+  font-size: 11px;
+  margin-top: 4px;
+}
+
+/* MAP */
+
+.learning-map {
+  min-height: 650px;
+  padding: 30px;
+
+  position: relative;
+  overflow: hidden;
+
+  border-radius: 22px;
+
+  background:
+    radial-gradient(
+      circle at 50% 40%,
+      rgba(18, 78, 102, 0.2),
+      transparent 45%
+    ),
+    #1d262d;
+
+  border: 1px solid rgba(211, 217, 212, 0.08);
+
+  box-shadow:
+    0 25px 50px rgba(0, 0, 0, 0.35),
+    inset 0 1px rgba(255, 255, 255, 0.04);
+}
+
+.map-title {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  margin-bottom: 35px;
+}
+
+.map-title h2 {
+  color: #ffffff;
+  font-size: 20px;
+}
+
+.map-title span {
+  color: #69c6e8;
+  font-size: 12px;
+}
+
+/* PATH */
+
+.map-path {
+  width: 100%;
+  max-width: 850px;
+  margin: auto;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.map-node-wrapper {
+  width: 100%;
+  min-height: 115px;
+
+  position: relative;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.map-node {
+  width: 68px;
+  height: 68px;
+
+  position: relative;
+  z-index: 3;
+
+  border-radius: 50%;
+  border: none;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  font-size: 22px;
+
+  transition: 0.3s ease;
+}
+
+.map-node.completed {
+  background: linear-gradient(
+    145deg,
+    #124e66,
+    #2f7896
+  );
+
+  color: #ffffff;
+
+  box-shadow:
+    0 0 0 7px rgba(47, 120, 150, 0.1),
+    0 15px 30px rgba(18, 78, 102, 0.4);
+}
+
+.map-node.current {
+  background: #4fa9cf;
+  color: #10242d;
+
+  box-shadow:
+    0 0 0 8px rgba(79, 169, 207, 0.12),
+    0 0 35px rgba(79, 169, 207, 0.45);
+
+  animation: currentGlow 2s ease-in-out infinite;
+}
+
+.map-node.locked {
+  background: #2b343b;
+  color: #68747b;
+  cursor: not-allowed;
+}
+
+.map-node:not(.locked):hover {
+  transform: scale(1.12);
+}
+
+.map-line {
+  position: absolute;
+
+  width: 5px;
+  height: 115px;
+
+  top: 68px;
+  left: 50%;
+
+  transform: translateX(-50%);
+
+  background: #303b42;
+
+  z-index: 1;
+}
+
+.completed-line {
+  background: linear-gradient(
+    #2f7896,
+    #124e66
+  );
+}
+
+.map-topic-info {
+  position: absolute;
+  width: 230px;
+
+  left: calc(50% + 65px);
+
+  text-align: left;
+}
+
+.map-topic-info small {
+  color: #4fa9cf;
+  font-size: 9px;
+  letter-spacing: 1px;
+}
+
+.map-topic-info h3 {
+  color: #ffffff;
+  font-size: 14px;
+  margin: 4px 0 6px;
+}
+
+.topic-status {
+  font-size: 10px;
+}
+
+.topic-status.completed {
+  color: #5cb9d9;
+}
+
+.topic-status.current {
+  color: #7dd5f2;
+}
+
+.topic-status.locked {
+  color: #68747b;
+}
+
+@keyframes currentGlow {
+  0%,
+  100% {
+    box-shadow:
+      0 0 0 8px rgba(79, 169, 207, 0.12),
+      0 0 25px rgba(79, 169, 207, 0.35);
+  }
+
+  50% {
+    box-shadow:
+      0 0 0 12px rgba(79, 169, 207, 0.08),
+      0 0 45px rgba(79, 169, 207, 0.55);
+  }
+}
+
+/* MOBILE */
+
+@media (max-width: 700px) {
+  .course-page-header {
+    align-items: flex-start;
+    gap: 20px;
+  }
+
+  .course-page-header h1 {
+    font-size: 27px;
+  }
+
+  .course-progress-box {
+    min-width: 100px;
+  }
+
+  .learning-map {
+    padding: 20px 10px;
+  }
+
+  .map-topic-info {
+    left: calc(50% + 52px);
+    width: 150px;
+  }
+
+  .map-topic-info h3 {
+    font-size: 12px;
+  }
+}

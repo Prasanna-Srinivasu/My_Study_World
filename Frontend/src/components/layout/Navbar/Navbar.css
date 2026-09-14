@@ -1,0 +1,137 @@
+.navbar {
+  height: 76px;
+  padding: 0 28px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  background: rgba(46, 57, 68, 0.82);
+  border-bottom: 1px solid rgba(211, 217, 212, 0.08);
+
+  backdrop-filter: blur(16px);
+
+  position: sticky;
+  top: 0;
+  z-index: 100;
+
+  box-shadow:
+    0 8px 25px rgba(0, 0, 0, 0.2),
+    inset 0 1px rgba(255, 255, 255, 0.04);
+}
+
+.navbar-logo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.logo-icon {
+  width: 44px;
+  height: 44px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 14px;
+
+  background: linear-gradient(
+    145deg,
+    #124E66,
+    #2F7896
+  );
+
+  color: #FFFFFF;
+  font-size: 14px;
+  font-weight: 800;
+
+  box-shadow:
+    0 8px 20px rgba(18, 78, 102, 0.4),
+    inset 0 1px rgba(255, 255, 255, 0.2);
+}
+
+.navbar-logo h2 {
+  color: #FFFFFF;
+  font-size: 17px;
+  margin-bottom: 2px;
+}
+
+.navbar-logo span:not(.logo-icon) {
+  color: var(--text-secondary);
+  font-size: 11px;
+}
+
+.navbar-right {
+  display: flex;
+  align-items: center;
+  gap: 22px;
+}
+
+.notification-btn {
+  width: 40px;
+  height: 40px;
+
+  border: 1px solid rgba(211, 217, 212, 0.08);
+  border-radius: 12px;
+
+  background: #2E3944;
+  color: #D3D9D4;
+
+  transition: 0.3s ease;
+}
+
+.notification-btn:hover {
+  transform: translateY(-2px);
+  background: #124E66;
+}
+
+.profile-mini {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.profile-avatar {
+  width: 40px;
+  height: 40px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 50%;
+
+  background: #124E66;
+  color: #FFFFFF;
+  font-weight: 700;
+}
+
+.profile-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.profile-info strong {
+  color: #FFFFFF;
+  font-size: 13px;
+}
+
+.profile-info span {
+  color: var(--text-secondary);
+  font-size: 11px;
+}
+
+@media (max-width: 650px) {
+  .navbar {
+    padding: 0 16px;
+  }
+
+  .profile-info {
+    display: none;
+  }
+
+  .navbar-logo h2 {
+    font-size: 15px;
+  }
+}

@@ -1,0 +1,60 @@
+.learning-map {
+  position: relative;
+  width: 100%;
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 20px 0 40px;
+}
+
+.learning-map-item {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.learning-map-item .topic-card {
+  width: 100%;
+}
+
+/* Connector */
+
+.map-connector {
+  position: relative;
+  width: 4px;
+  height: 55px;
+  margin: 0;
+  background: rgba(46, 57, 68, 0.9);
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.map-connector span {
+  position: absolute;
+  inset: 0;
+  height: 0;
+  background: linear-gradient(
+    to bottom,
+    var(--blue-primary),
+    var(--blue-light)
+  );
+  transition: height 0.5s ease;
+}
+
+/* Completed topic connector */
+
+.learning-map-item:has(.topic-completed) .map-connector span {
+  height: 100%;
+}
+
+/* Mobile */
+
+@media (max-width: 700px) {
+  .learning-map {
+    padding: 10px 0 30px;
+  }
+
+  .map-connector {
+    height: 40px;
+  }
+}

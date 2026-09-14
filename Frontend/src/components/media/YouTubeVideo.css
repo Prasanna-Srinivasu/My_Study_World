@@ -1,0 +1,82 @@
+.youtube-video-card {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 24px;
+  background: linear-gradient(
+    145deg,
+    rgba(46, 57, 68, 0.98),
+    rgba(33, 42, 49, 0.98)
+  );
+  border: 1px solid rgba(47, 120, 150, 0.35);
+  border-radius: 20px;
+  box-shadow:
+    0 15px 30px rgba(0, 0, 0, 0.35),
+    0 0 25px rgba(18, 78, 102, 0.15);
+}
+
+.youtube-icon {
+  width: 58px;
+  height: 58px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 16px;
+  background: linear-gradient(145deg, #124E66, #2F7896);
+  color: white;
+  font-size: 22px;
+  box-shadow: 0 10px 25px rgba(18, 78, 102, 0.4);
+}
+
+.youtube-content {
+  flex: 1;
+}
+
+.youtube-content span {
+  color: #2F7896;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1px;
+}
+
+.youtube-content h3 {
+  margin: 5px 0;
+  color: white;
+  font-size: 18px;
+}
+
+.youtube-content p {
+  color: var(--text-secondary);
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.youtube-button {
+  padding: 12px 18px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #124E66, #2F7896);
+  color: white;
+  font-size: 13px;
+  font-weight: 700;
+  white-space: nowrap;
+  box-shadow: 0 8px 18px rgba(18, 78, 102, 0.35);
+  transition: 0.3s ease;
+}
+
+.youtube-button:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 25px rgba(18, 78, 102, 0.5);
+}
+
+@media (max-width: 650px) {
+  .youtube-video-card {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .youtube-button {
+    width: 100%;
+    text-align: center;
+  }
+}
