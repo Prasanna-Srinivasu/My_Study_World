@@ -1,0 +1,667 @@
+/* =========================
+   CODING PAGE
+========================= */
+
+.coding-page {
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+
+  padding: 35px 25px 80px;
+
+  color: #edf2f0;
+}
+
+/* =========================
+   HEADER
+========================= */
+
+.coding-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+
+  gap: 25px;
+
+  margin-bottom: 30px;
+}
+
+.coding-back-btn {
+  margin-bottom: 20px;
+
+  padding: 9px 14px;
+
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 9px;
+
+  background: rgba(255, 255, 255, 0.04);
+
+  color: #b9c4c0;
+
+  font-size: 12px;
+  font-weight: 600;
+
+  cursor: pointer;
+}
+
+.coding-back-btn:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.coding-label {
+  margin-bottom: 8px;
+
+  color: #86aaa3;
+
+  font-size: 11px;
+  font-weight: 800;
+
+  letter-spacing: 1px;
+}
+
+.coding-header h1 {
+  margin: 0 0 10px;
+
+  color: #f4f6f5;
+
+  font-size: 34px;
+}
+
+.coding-header p {
+  margin: 0;
+
+  color: #929f9b;
+
+  font-size: 14px;
+}
+
+.coding-difficulty {
+  padding: 8px 13px;
+
+  border-radius: 20px;
+
+  background: rgba(200, 184, 154, 0.10);
+
+  color: #c8b89a;
+
+  font-size: 11px;
+  font-weight: 700;
+
+  text-transform: uppercase;
+}
+
+/* =========================
+   WORKSPACE
+========================= */
+
+.coding-workspace {
+  display: grid;
+
+  grid-template-columns: 0.9fr 1.5fr;
+
+  min-height: 600px;
+
+  border: 1px solid rgba(255, 255, 255, 0.08);
+
+  border-radius: 18px;
+
+  overflow: hidden;
+
+  background: #151b1f;
+
+  box-shadow:
+    0 20px 45px rgba(0, 0, 0, 0.28);
+}
+
+/* =========================
+   PROBLEM PANEL
+========================= */
+
+.coding-problem-panel {
+  border-right: 1px solid rgba(255, 255, 255, 0.08);
+
+  background:
+    linear-gradient(
+      145deg,
+      rgba(35, 44, 51, 0.98),
+      rgba(27, 34, 40, 0.98)
+    );
+}
+
+.panel-title {
+  padding: 15px 20px;
+
+  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+
+  background: rgba(255, 255, 255, 0.035);
+
+  color: #9bbfb5;
+
+  font-size: 12px;
+  font-weight: 800;
+
+  text-transform: uppercase;
+}
+
+.problem-content {
+  padding: 25px;
+}
+
+.problem-content h2 {
+  margin: 0 0 18px;
+
+  color: #e8eeec;
+
+  font-size: 23px;
+}
+
+.problem-content > p {
+  color: #aab5b1;
+
+  font-size: 14px;
+
+  line-height: 1.7;
+}
+
+.problem-block {
+  margin-top: 28px;
+}
+
+.problem-block h3 {
+  margin: 0 0 8px;
+
+  color: #d6dfdc;
+
+  font-size: 14px;
+}
+
+.problem-block p {
+  margin: 0;
+
+  color: #8f9c98;
+
+  font-size: 13px;
+
+  line-height: 1.6;
+}
+
+.language-badge {
+  display: inline-block;
+
+  padding: 6px 10px;
+
+  border-radius: 7px;
+
+  background: rgba(143, 168, 184, 0.10);
+
+  color: #a8bcc8;
+
+  font-size: 11px;
+  font-weight: 700;
+
+  text-transform: uppercase;
+}
+
+/* =========================
+   EDITOR
+========================= */
+
+.coding-editor-panel {
+  display: flex;
+  flex-direction: column;
+
+  background: #101518;
+}
+
+.editor-header {
+  height: 48px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  padding: 0 18px;
+
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+
+  background: #151b1f;
+
+  color: #9bbfb5;
+
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.editor-file {
+  color: #788682;
+
+  font-weight: 500;
+}
+
+.code-editor {
+  width: 100%;
+
+  flex: 1;
+
+  min-height: 480px;
+
+  padding: 22px;
+
+  resize: none;
+
+  border: none;
+  outline: none;
+
+  background: #101518;
+
+  color: #d6dfdc;
+
+  font-family:
+    "Fira Code",
+    "Consolas",
+    "Courier New",
+    monospace;
+
+  font-size: 14px;
+
+  line-height: 1.7;
+
+  tab-size: 4;
+}
+
+.code-editor::selection {
+  background: rgba(155, 191, 181, 0.25);
+}
+
+/* =========================
+   EDITOR ACTIONS
+========================= */
+
+.editor-actions {
+  display: flex;
+
+  gap: 12px;
+
+  padding: 15px 18px;
+
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+
+  background: #151b1f;
+}
+
+.run-code-btn,
+.submit-code-btn {
+  padding: 11px 18px;
+
+  border-radius: 9px;
+
+  font-size: 12px;
+  font-weight: 700;
+
+  cursor: pointer;
+}
+
+.run-code-btn {
+  border: 1px solid rgba(155, 191, 181, 0.25);
+
+  background: rgba(155, 191, 181, 0.10);
+
+  color: #b9d2ca;
+}
+
+.run-code-btn:hover:not(:disabled) {
+  background: rgba(155, 191, 181, 0.18);
+}
+
+.run-code-btn:disabled {
+  opacity: 0.55;
+
+  cursor: not-allowed;
+}
+
+.submit-code-btn {
+  border: none;
+
+  background: #86aaa3;
+
+  color: #101518;
+}
+
+.submit-code-btn:hover {
+  background: #9bbfb5;
+}
+
+/* =========================
+   INPUT / OUTPUT
+========================= */
+
+.io-section {
+  display: grid;
+
+  grid-template-columns: 1fr 1fr;
+
+  gap: 18px;
+
+  margin-top: 22px;
+}
+
+.io-panel {
+  min-height: 180px;
+
+  overflow: hidden;
+
+  border-radius: 15px;
+
+  border: 1px solid rgba(255, 255, 255, 0.07);
+
+  background: #151b1f;
+}
+
+.io-title {
+  padding: 12px 16px;
+
+  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+
+  color: #9bbfb5;
+
+  font-size: 11px;
+  font-weight: 800;
+
+  text-transform: uppercase;
+}
+
+.input-editor {
+  width: 100%;
+
+  height: 135px;
+
+  padding: 15px;
+
+  resize: vertical;
+
+  border: none;
+  outline: none;
+
+  background: #101518;
+
+  color: #d6dfdc;
+
+  font-family: "Consolas", monospace;
+
+  font-size: 13px;
+}
+
+.output-panel {
+  min-height: 135px;
+
+  padding: 15px;
+
+  color: #9da9a5;
+
+  font-family: "Consolas", monospace;
+
+  font-size: 13px;
+
+  line-height: 1.6;
+
+  white-space: pre-wrap;
+}
+
+/* =========================
+   TEST CASES
+========================= */
+
+.test-case-section {
+  margin-top: 25px;
+
+  padding: 24px;
+
+  border-radius: 18px;
+
+  border: 1px solid rgba(255, 255, 255, 0.07);
+
+  background:
+    linear-gradient(
+      145deg,
+      rgba(35, 44, 51, 0.96),
+      rgba(27, 34, 40, 0.96)
+    );
+}
+
+.test-case-header {
+  display: flex;
+
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 15px;
+
+  margin-bottom: 20px;
+}
+
+.section-label {
+  margin-bottom: 6px;
+
+  color: #86aaa3;
+
+  font-size: 10px;
+  font-weight: 800;
+
+  letter-spacing: 1px;
+}
+
+.test-case-header h2 {
+  margin: 0;
+
+  color: #e8eeec;
+
+  font-size: 20px;
+}
+
+.coding-score-badge {
+  min-width: 65px;
+
+  padding: 9px 12px;
+
+  border-radius: 10px;
+
+  background: rgba(120, 170, 145, 0.12);
+
+  border: 1px solid rgba(120, 170, 145, 0.25);
+
+  color: #b9d7c5;
+
+  font-size: 20px;
+  font-weight: 800;
+
+  text-align: center;
+}
+
+.test-case-list {
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 10px;
+}
+
+.test-case-card {
+  display: flex;
+
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 15px;
+
+  padding: 15px;
+
+  border-radius: 10px;
+
+  background: rgba(255, 255, 255, 0.035);
+
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.test-case-number {
+  color: #c0cbc7;
+
+  font-size: 13px;
+
+  font-weight: 600;
+}
+
+.test-case-status {
+  font-size: 12px;
+
+  font-weight: 600;
+}
+
+.test-case-status.locked {
+  color: #7e8b87;
+}
+
+/* =========================
+   SUBMISSION
+========================= */
+
+.submission-status {
+  display: flex;
+
+  align-items: center;
+
+  gap: 15px;
+
+  margin-top: 20px;
+
+  padding: 20px;
+
+  border-radius: 15px;
+
+  border: 1px solid rgba(200, 184, 154, 0.15);
+
+  background: rgba(200, 184, 154, 0.06);
+}
+
+.submission-icon {
+  font-size: 24px;
+}
+
+.submission-status h3 {
+  margin: 0 0 5px;
+
+  color: #d6dfdc;
+
+  font-size: 15px;
+}
+
+.submission-status p {
+  margin: 0;
+
+  color: #929f9b;
+
+  font-size: 13px;
+}
+
+/* =========================
+   ERROR
+========================= */
+
+.coding-error {
+  padding: 50px;
+
+  text-align: center;
+
+  border-radius: 20px;
+
+  background:
+    linear-gradient(
+      145deg,
+      rgba(35, 44, 51, 0.96),
+      rgba(27, 34, 40, 0.96)
+    );
+}
+
+.coding-error h1 {
+  margin-bottom: 10px;
+
+  color: #e8eeec;
+}
+
+.coding-error p {
+  margin-bottom: 25px;
+
+  color: #929f9b;
+}
+
+.coding-error button {
+  padding: 11px 18px;
+
+  border: 1px solid rgba(155, 191, 181, 0.18);
+
+  border-radius: 9px;
+
+  background: rgba(155, 191, 181, 0.08);
+
+  color: #b9d2ca;
+
+  cursor: pointer;
+}
+
+/* =========================
+   MOBILE
+========================= */
+
+@media (max-width: 900px) {
+
+  .coding-workspace {
+    grid-template-columns: 1fr;
+  }
+
+  .coding-problem-panel {
+    border-right: none;
+
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  .code-editor {
+    min-height: 400px;
+  }
+
+  .io-section {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 600px) {
+
+  .coding-page {
+    padding: 25px 15px 60px;
+  }
+
+  .coding-header {
+    flex-direction: column;
+  }
+
+  .coding-header h1 {
+    font-size: 28px;
+  }
+
+  .coding-difficulty {
+    align-self: flex-start;
+  }
+
+  .editor-actions {
+    flex-direction: column;
+  }
+
+  .run-code-btn,
+  .submit-code-btn {
+    width: 100%;
+  }
+
+  .test-case-card {
+    flex-direction: column;
+
+    align-items: flex-start;
+  }
+}
