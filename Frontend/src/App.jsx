@@ -4,11 +4,12 @@ import "./App.css";
 import Navbar from "./components/layout/Navbar/Navbar.jsx";
 import Sidebar from "./components/layout/Sidebar/Sidebar.jsx";
 import Login from "./pages/Login/Login";
-
+import VideoPage from "./pages/Video/VideoPage.jsx";
 import Home from "./pages/Home/Home.jsx";
 import Learn from "./pages/Learn/Learn.jsx";
 import CoursePage from "./pages/Course/CoursePage.jsx";
 import TopicPage from "./pages/Topic/TopicPage.jsx";
+import CodingPage from "./pages/Coding/CodingPage.jsx";
 
 import Practice from "./pages/Practice/Practice.jsx";
 import Interview from "./pages/Interview/Interview.jsx";
@@ -37,6 +38,16 @@ function App() {
             <Route
               path="/topic/:courseId/:topicId"
               element={<TopicPage />}
+            />
+            <Route
+              path="/video/:courseId/:topicId"
+              element={<VideoPage />}
+            />
+
+            {/* Coding IDE */}
+            <Route
+              path="/coding/:courseId/:topicId/:problemId"
+              element={<CodingPage />}
             />
             <Route path="/login" element={<Login />} />
 

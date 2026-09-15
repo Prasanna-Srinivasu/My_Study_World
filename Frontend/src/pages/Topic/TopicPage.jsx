@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
 import { topics } from "../../data/topics";
@@ -13,13 +13,32 @@ import { visuals } from "../../data/visuals";
 import "./TopicPage.css";
 
 function TopicPage() {
-  const [selectedAnswers, setSelectedAnswers] = useState({});
+  const { courseId, topicId } = useParams();
+  const navigate = useNavigate();
+
+  const [selectedAnswers, setSelectedAnswers] = useState(() => {
+    const savedPracticeProgress = JSON.parse(
+      localStorage.getItem("practiceProgress") || "{}"
+    );
+
+    return savedPracticeProgress[courseId]?.[topicId] || {};
+  });
   const [openInterview, setOpenInterview] = useState({});
   const [viewedInterview, setViewedInterview] = useState({});
   const [videoCompleted, setVideoCompleted] = useState(false);
 
-  const { courseId, topicId } = useParams();
-  const navigate = useNavigate();
+  useEffect(() => {
+    const savedVideoProgress = JSON.parse(
+      localStorage.getItem("videoProgress") || "{}"
+    );
+
+    const completed =
+      savedVideoProgress[courseId]?.[topicId] === true;
+
+    setVideoCompleted(completed);
+  }, [courseId, topicId]);
+
+
 
   const problems = codingProblems[topicId] || [];
   const visual = visuals[topicId];
@@ -62,8 +81,8 @@ function TopicPage() {
   const practiceScore =
     practiceQuestions.length > 0
       ? Math.round(
-          (correctPracticeCount / practiceQuestions.length) * 100,
-        )
+        (correctPracticeCount / practiceQuestions.length) * 100,
+      )
       : 100;
 
   // =========================================================
@@ -91,7 +110,18 @@ function TopicPage() {
   // We will connect this to the real test-case result later.
   //
 
-  const codingCompleted = problems.length === 0;
+  const savedCodingProgress = JSON.parse(
+    localStorage.getItem("codingProgress") || "{}"
+  );
+
+  const completedCodingProblems =
+    savedCodingProgress[courseId]?.[topicId] || [];
+
+  const codingCompleted =
+    problems.length === 0 ||
+    problems.every((problem) =>
+      completedCodingProblems.includes(problem.id)
+    );
 
   // =========================================================
   // FINAL TOPIC COMPLETION
@@ -141,13 +171,32 @@ function TopicPage() {
   const handleAnswer = (questionId, option, correctAnswer) => {
     if (selectedAnswers[questionId]) return;
 
-    setSelectedAnswers((prev) => ({
-      ...prev,
-      [questionId]: {
-        selected: option,
-        correct: option === correctAnswer,
-      },
-    }));
+    setSelectedAnswers((prev) => {
+      const updatedAnswers = {
+        ...prev,
+        [questionId]: {
+          selected: option,
+          correct: option === correctAnswer,
+        },
+      };
+
+      const savedPracticeProgress = JSON.parse(
+        localStorage.getItem("practiceProgress") || "{}"
+      );
+
+      if (!savedPracticeProgress[courseId]) {
+        savedPracticeProgress[courseId] = {};
+      }
+
+      savedPracticeProgress[courseId][topicId] = updatedAnswers;
+
+      localStorage.setItem(
+        "practiceProgress",
+        JSON.stringify(savedPracticeProgress)
+      );
+
+      return updatedAnswers;
+    });
   };
 
   // =========================================================
@@ -219,7 +268,11 @@ function TopicPage() {
       {/* ================================================= */}
 
       {lesson && (
-        <section className="topic-section">
+        <section
+          id="practice"
+          className="topic-section"
+        >
+
           <div className="section-title">
             <span>01</span>
 
@@ -227,27 +280,330 @@ function TopicPage() {
               <h2>Understand the Concept</h2>
 
               <p>
-                Learn the important ideas behind this topic.
+                Learn the topic properly before moving to practice.
               </p>
             </div>
           </div>
 
+          {/* INTRODUCTION */}
+
           <div className="concept-card surface-3d">
+
+            <h3>Introduction</h3>
+
             <p className="concept-introduction">
               {lesson.introduction}
             </p>
 
-            {lesson.keyPoints?.length > 0 && (
-              <ul className="concept-points">
-                {lesson.keyPoints.map((point, index) => (
-                  <li key={index}>
-                    <span>✓</span>
-                    <p>{point}</p>
-                  </li>
-                ))}
-              </ul>
-            )}
           </div>
+
+          {/* DEFINITION */}
+
+          {lesson.definition && (
+            <div className="concept-card surface-3d">
+
+              <h3>What is it?</h3>
+
+              <p className="concept-introduction">
+                {lesson.definition}
+              </p>
+
+            </div>
+          )}
+
+          {/* DETAILED EXPLANATION */}
+
+          {lesson.detailedExplanation && (
+            <div className="concept-card surface-3d">
+
+              <h3>Detailed Explanation</h3>
+
+              <p className="concept-introduction">
+                {lesson.detailedExplanation}
+              </p>
+
+            </div>
+          )}
+
+          {/* WHY IT IS NEEDED */}
+
+          {lesson.whyProgramming && (
+            <div className="concept-card surface-3d">
+
+              <h3>Why is it Needed?</h3>
+
+              <p className="concept-introduction">
+                {lesson.whyProgramming}
+              </p>
+
+            </div>
+          )}
+
+          {/* HOW IT WORKS */}
+
+          {lesson.howProgrammingWorks?.length > 0 && (
+            <div className="concept-card surface-3d">
+
+              <h3>How Does It Work?</h3>
+
+              <div className="concept-points">
+
+                {lesson.howProgrammingWorks.map(
+                  (step, index) => (
+                    <div key={index}>
+                      <strong>{step.title}</strong>
+
+                      <p>
+                        {step.explanation}
+                      </p>
+                    </div>
+                  ),
+                )}
+
+              </div>
+
+            </div>
+          )}
+
+          {/* KEY POINTS */}
+
+          {lesson.keyPoints?.length > 0 && (
+            <div className="concept-card surface-3d">
+
+              <h3>Key Points to Remember</h3>
+
+              <ul className="concept-points">
+
+                {lesson.keyPoints.map(
+                  (point, index) => (
+                    <li key={index}>
+                      <span>✓</span>
+
+                      <p>{point}</p>
+                    </li>
+                  ),
+                )}
+
+              </ul>
+
+            </div>
+          )}
+
+          {/* REAL LIFE EXAMPLE */}
+
+          {lesson.realLifeExample && (
+            <div className="concept-card surface-3d">
+
+              <h3>
+                {lesson.realLifeExample.title}
+              </h3>
+
+              <h4>Situation</h4>
+
+              <p className="concept-introduction">
+                {lesson.realLifeExample.situation}
+              </p>
+
+              <h4>How does this connect to Programming?</h4>
+
+              <p className="concept-introduction">
+                {lesson.realLifeExample.connection}
+              </p>
+
+              <h4>What should you learn from this?</h4>
+
+              <p className="concept-introduction">
+                {lesson.realLifeExample.lesson}
+              </p>
+
+            </div>
+          )}
+
+          {/* INPUT PROCESS OUTPUT */}
+
+          {lesson.inputProcessOutput && (
+            <div className="concept-card surface-3d">
+
+              <h3>Input → Process → Output</h3>
+
+              <div className="concept-points">
+
+                <div>
+                  <strong>Input</strong>
+
+                  <p>
+                    {lesson.inputProcessOutput.input}
+                  </p>
+                </div>
+
+                <div>
+                  <strong>Process</strong>
+
+                  <p>
+                    {lesson.inputProcessOutput.process}
+                  </p>
+                </div>
+
+                <div>
+                  <strong>Output</strong>
+
+                  <p>
+                    {lesson.inputProcessOutput.output}
+                  </p>
+                </div>
+
+              </div>
+
+            </div>
+          )}
+
+          {/* WHEN TO USE */}
+
+          {lesson.whenToUse?.length > 0 && (
+            <div className="concept-card surface-3d">
+
+              <h3>When to Use</h3>
+
+              <ul className="concept-points">
+
+                {lesson.whenToUse.map(
+                  (item, index) => (
+                    <li key={index}>
+                      <span>✓</span>
+
+                      <p>{item}</p>
+                    </li>
+                  ),
+                )}
+
+              </ul>
+
+            </div>
+          )}
+
+          {/* WHEN NOT TO USE */}
+
+          {lesson.whenNotToUse?.length > 0 && (
+            <div className="concept-card surface-3d">
+
+              <h3>When NOT to Use</h3>
+
+              <ul className="concept-points">
+
+                {lesson.whenNotToUse.map(
+                  (item, index) => (
+                    <li key={index}>
+                      <span>•</span>
+
+                      <p>{item}</p>
+                    </li>
+                  ),
+                )}
+
+              </ul>
+
+            </div>
+          )}
+
+          {/* COMMON MISTAKES */}
+
+          {lesson.commonMistakes?.length > 0 && (
+            <div className="concept-card surface-3d">
+
+              <h3>Common Mistakes</h3>
+
+              <ul className="concept-points">
+
+                {lesson.commonMistakes.map(
+                  (mistake, index) => (
+                    <li key={index}>
+                      <span>!</span>
+
+                      <p>{mistake}</p>
+                    </li>
+                  ),
+                )}
+
+              </ul>
+
+            </div>
+          )}
+
+          {/* QUICK ANSWER */}
+
+          {lesson.quickAnswer && (
+            <div className="concept-card surface-3d">
+
+              <h3>Quick One-Line Answer</h3>
+
+              <p className="concept-introduction">
+                <strong>{lesson.quickAnswer}</strong>
+              </p>
+
+            </div>
+          )}
+
+          {/* CHEAT CODE */}
+
+          {lesson.cheatCode && (
+            <div className="concept-card surface-3d">
+
+              <h3>
+                {lesson.cheatCode.title}
+              </h3>
+
+              <p className="concept-introduction">
+                <strong>
+                  Remember:
+                </strong>{" "}
+                {lesson.cheatCode.remember}
+              </p>
+
+              <h4>Key Points</h4>
+
+              <ul className="concept-points">
+
+                {lesson.cheatCode.keyPoints.map(
+                  (point, index) => (
+                    <li key={index}>
+                      <span>✓</span>
+
+                      <p>{point}</p>
+                    </li>
+                  ),
+                )}
+
+              </ul>
+
+              <h4>Interview Answer</h4>
+
+              <p className="concept-introduction">
+                {lesson.cheatCode.interviewAnswer}
+              </p>
+
+              <h4>Keywords</h4>
+
+              <p className="concept-introduction">
+                {lesson.cheatCode.keywords.join(" • ")}
+              </p>
+
+            </div>
+          )}
+
+          {/* LEARNING OUTCOME */}
+
+          {lesson.learningOutcome && (
+            <div className="concept-card surface-3d">
+
+              <h3>What You Should Be Able to Do</h3>
+
+              <p className="concept-introduction">
+                {lesson.learningOutcome}
+              </p>
+
+            </div>
+          )}
+
         </section>
       )}
 
@@ -265,38 +621,101 @@ function TopicPage() {
       )}
 
       {/* ================================================= */}
-      {/* CODE EXAMPLE */}
+      {/* PROGRAMMING EXAMPLE */}
       {/* ================================================= */}
 
-      {lesson?.example && (
+      {lesson?.programmingExample && (
         <section className="topic-section">
+
           <div className="section-title">
             <span>02</span>
 
             <div>
               <h2>See It in Code</h2>
 
-              <p>{lesson.example.title}</p>
+              <p>
+                Understand the concept using a simple programming example.
+              </p>
             </div>
           </div>
 
           <div className="code-card surface-3d">
+
             <div className="code-top">
-              <span>{lesson.example.language}</span>
+
+              <div>
+                <span>
+                  {lesson.programmingExample.language}
+                </span>
+
+                <h3>
+                  {lesson.programmingExample.title}
+                </h3>
+              </div>
 
               <button
+                type="button"
                 onClick={() =>
                   navigator.clipboard.writeText(
-                    lesson.example.code,
+                    lesson.programmingExample.code,
                   )
                 }
               >
                 Copy
               </button>
+
             </div>
 
-            <pre>{lesson.example.code}</pre>
+            <pre>
+              {lesson.programmingExample.code}
+            </pre>
+
           </div>
+
+          {/* CODE EXPLANATION */}
+
+          {lesson.programmingExample.explanation && (
+            <div className="concept-card surface-3d">
+
+              <h3>What Does This Code Do?</h3>
+
+              <p className="concept-introduction">
+                {lesson.programmingExample.explanation}
+              </p>
+
+            </div>
+          )}
+
+          {/* STEP-BY-STEP CODE EXPLANATION */}
+
+          {lesson.codeExplanation?.length > 0 && (
+            <div className="concept-card surface-3d">
+
+              <h3>Step-by-Step Code Explanation</h3>
+
+              <div className="concept-points">
+
+                {lesson.codeExplanation.map(
+                  (step, index) => (
+                    <div key={index}>
+
+                      <strong>
+                        Step {index + 1}: {step.title}
+                      </strong>
+
+                      <p>
+                        {step.explanation}
+                      </p>
+
+                    </div>
+                  ),
+                )}
+
+              </div>
+
+            </div>
+          )}
+
         </section>
       )}
 
@@ -306,6 +725,7 @@ function TopicPage() {
 
       {video && (
         <section className="topic-section">
+
           <div className="section-title">
             <span>03</span>
 
@@ -313,62 +733,52 @@ function TopicPage() {
               <h2>Learn With Video</h2>
 
               <p>
-                Watch a topic-specific explanation.
+                Watch the topic explanation on the dedicated video page.
               </p>
             </div>
           </div>
 
-          <div className="youtube-video-card surface-3d">
+          <div className="video-learning-card surface-3d">
 
-            <div className="youtube-icon">
-              ▶
-            </div>
+            <div className="video-learning-content">
 
-            <div className="youtube-content">
+              <span className="video-label">
+                TOPIC VIDEO
+              </span>
 
-              <span>YOUTUBE RESOURCE</span>
+              <h3>
+                {topic.title}
+              </h3>
 
-              <h3>{topic.title}</h3>
-
-              <p>
-                Watch a focused video for this topic.
-                Recommended duration:{" "}
-                {video.duration}.
+              <p className="video-duration">
+                Recommended duration: {video.duration}
               </p>
 
-            </div>
-
-            <div className="youtube-actions">
-
-              <a
-                href={`https://www.youtube.com/results?search_query=${encodeURIComponent(
-                  video.search,
-                )}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="youtube-button"
-              >
-                Watch on YouTube →
-              </a>
+              {video.description && (
+                <p className="video-description-preview">
+                  {video.description}
+                </p>
+              )}
 
               <button
                 type="button"
-                className={`video-complete-btn ${
-                  videoCompleted ? "completed" : ""
-                }`}
-                onClick={() => setVideoCompleted(true)}
-                disabled={videoCompleted}
+                className="video-complete-btn"
+                onClick={() =>
+                  navigate(`/video/${courseId}/${topicId}`)
+                }
               >
                 {videoCompleted
-                  ? "✓ Video Completed"
-                  : "Mark Video Complete"}
+                  ? "✓ Video Completed — Open Video"
+                  : "Watch Video →"}
               </button>
 
             </div>
 
           </div>
+
         </section>
       )}
+
 
       {/* ================================================= */}
       {/* PRACTICE */}
@@ -460,11 +870,10 @@ function TopicPage() {
 
                   {result && (
                     <div
-                      className={`practice-result ${
-                        result.correct
-                          ? "correct"
-                          : "wrong"
-                      }`}
+                      className={`practice-result ${result.correct
+                        ? "correct"
+                        : "wrong"
+                        }`}
                     >
                       <strong>
                         {result.correct
@@ -652,6 +1061,11 @@ function TopicPage() {
                 <button
                   className="coding-start-btn"
                   type="button"
+                  onClick={() =>
+                    navigate(
+                      `/coding/${courseId}/${topicId}/${problem.id}`
+                    )
+                  }
                 >
                   Solve Problem →
                 </button>

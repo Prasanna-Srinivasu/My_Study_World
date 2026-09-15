@@ -36,6 +36,7 @@ function CodingPage() {
     const [submitted, setSubmitted] = useState(false);
 
     const [score, setScore] = useState(null);
+    const [testResults, setTestResults] = useState([]);
 
     // Problem not found
     if (!problem) {
@@ -56,7 +57,7 @@ function CodingPage() {
                             )
                         }
                     >
-                        Solve Problem →
+                        ← Back to Topic
                     </button>
                 </div>
             </div>
@@ -99,14 +100,115 @@ function CodingPage() {
         }
     };
 
-    const handleSubmit = () => {
-        setSubmitted(true);
+    const handleSubmit = async () => {
+        if (!problem.testCases?.length) {
+            setSubmitted(true);
+            setOutput(
+                "Test cases are not available for this problem yet."
+            );
+            return;
+        }
 
+        setIsRunning(true);
+        setSubmitted(false);
         setScore(null);
+        setOutput("Running all test cases...");
 
-        setOutput(
-            "Submission system will be connected to the real Java execution service."
-        );
+        try {
+            let passed = 0;
+            const results = [];
+
+            for (const testCase of problem.testCases) {
+                const response = await axios.post(
+                    "http://localhost:8080/api/code/run",
+                    {
+                        code: code,
+                        input: testCase.input,
+                    }
+                );
+
+                const result = response.data;
+
+                const actualOutput = (result.output || "")
+                    .trim()
+                    .replace(/\r\n/g, "\n");
+
+                const expectedOutput = (testCase.expectedOutput || "")
+                    .trim()
+                    .replace(/\r\n/g, "\n");
+
+                const passedTest = result.success &&
+                    actualOutput === expectedOutput;
+
+                if (passedTest) {
+                    passed++;
+                }
+
+                results.push({
+                    input: testCase.input,
+                    expected: expectedOutput,
+                    actual: actualOutput,
+                    passed: passedTest,
+                    error: result.error || "",
+                });
+            }
+
+            const calculatedScore = Math.round(
+                (passed / problem.testCases.length) * 100
+            );
+
+            setTestResults(results);
+            setScore(calculatedScore);
+            setSubmitted(true);
+
+            if (calculatedScore === 100) {
+                const codingProgress = JSON.parse(
+                    localStorage.getItem("codingProgress") || "{}"
+                );
+
+                if (!codingProgress[courseId]) {
+                    codingProgress[courseId] = {};
+                }
+
+                if (!codingProgress[courseId][topicId]) {
+                    codingProgress[courseId][topicId] = [];
+                }
+
+                if (!codingProgress[courseId][topicId].includes(problemId)) {
+                    codingProgress[courseId][topicId].push(problemId);
+                }
+
+                localStorage.setItem(
+                    "codingProgress",
+                    JSON.stringify(codingProgress)
+                );
+            }
+
+            setOutput(
+                results
+                    .map(
+                        (result, index) =>
+                            `Test Case ${index + 1}: ${result.passed ? "✓ PASSED" : "✗ FAILED"
+                            }\n` +
+                            `Expected: ${result.expected}\n` +
+                            `Actual: ${result.actual}` +
+                            (result.error
+                                ? `\nError: ${result.error}`
+                                : "")
+                    )
+                    .join("\n\n") +
+                `\n\nScore: ${calculatedScore}%`
+            );
+        } catch (error) {
+            console.error("Submission error:", error);
+
+            setOutput(
+                "Could not connect to the Study World backend.\n\n" +
+                "Make sure Spring Boot is running on port 8080."
+            );
+        } finally {
+            setIsRunning(false);
+        }
     };
 
     return (
@@ -173,6 +275,44 @@ function CodingPage() {
                         <p>
                             {problem.description}
                         </p>
+
+                        <div className="problem-block">
+                            <h3>Input</h3>
+                            <p>{problem.input}</p>
+                        </div>
+
+                        <div className="problem-block">
+                            <h3>Output</h3>
+                            <p>{problem.output}</p>
+                        </div>
+
+                        <div className="problem-block">
+                            <h3>Example Input</h3>
+                            <pre>{problem.exampleInput}</pre>
+                        </div>
+
+                        <div className="problem-block">
+                            <h3>Example Output</h3>
+                            <pre>{problem.exampleOutput}</pre>
+                        </div>
+
+                        <div className="problem-block">
+                            <h3>Constraints</h3>
+                            <ul>
+                                {problem.constraints?.map((constraint, index) => (
+                                    <li key={index}>{constraint}</li>
+                                ))}
+                            </ul>
+                        </div>
+
+                        <div className="problem-block">
+                            <h3>Complexity</h3>
+                            <p>
+                                Time: {problem.complexity?.time}
+                                <br />
+                                Space: {problem.complexity?.space}
+                            </p>
+                        </div>
 
                         <div className="problem-block">
 
@@ -303,65 +443,42 @@ function CodingPage() {
 
             <section className="test-case-section">
 
-                <div className="test-case-header">
-
-                    <div>
-
-                        <div className="section-label">
-                            TEST CASES
-                        </div>
-
-                        <h2>
-                            Test Case Results
-                        </h2>
-
-                    </div>
-
-                    {score !== null && (
-                        <div className="coding-score-badge">
-                            {score}%
-                        </div>
-                    )}
-
-                </div>
-
                 <div className="test-case-list">
 
-                    <div className="test-case-card">
+                    {problem.testCases?.map((testCase, index) => (
+                        <div className="test-case-card" key={index}>
 
-                        <div className="test-case-number">
-                            Test Case 1
+                            <div className="test-case-number">
+                                Test Case {index + 1}
+                            </div>
+
+                            <div className="test-case-input">
+                                <strong>Input:</strong>
+                                <pre>{testCase.input}</pre>
+                            </div>
+
+                            <div className="test-case-output">
+                                <strong>Expected Output:</strong>
+                                <pre>{testCase.expectedOutput}</pre>
+                            </div>
+
+                            <div
+                                className={`test-case-status ${testResults[index]
+                                    ? testResults[index].passed
+                                        ? "passed"
+                                        : "failed"
+                                    : "locked"
+                                    }`}
+                            >
+                                {testResults[index]
+                                    ? testResults[index].passed
+                                        ? "✓ Test Case Passed"
+                                        : "✗ Test Case Failed"
+                                    : "Waiting for submission"}
+                            </div>
+
                         </div>
-
-                        <div className="test-case-status locked">
-                            Waiting for execution
-                        </div>
-
-                    </div>
-
-                    <div className="test-case-card">
-
-                        <div className="test-case-number">
-                            Test Case 2
-                        </div>
-
-                        <div className="test-case-status locked">
-                            Waiting for execution
-                        </div>
-
-                    </div>
-
-                    <div className="test-case-card">
-
-                        <div className="test-case-number">
-                            Test Case 3
-                        </div>
-
-                        <div className="test-case-status locked">
-                            Waiting for execution
-                        </div>
-
-                    </div>
+                    ))}
 
                 </div>
 

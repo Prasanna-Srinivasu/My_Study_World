@@ -1,77 +1,91 @@
 export const videos = {
+
   // =========================
   // JAVA FULL-STACK
   // =========================
 
   "java-programming": {
-    search:
-      "What is programming for beginners Telusko",
+    videoUrl: "",
+    search: "What is programming for beginners Telusko",
     duration: "20-30 minutes",
+    description: "",
   },
 
   "java-introduction": {
-    search:
-      "Java introduction tutorial beginners Telusko",
+    videoUrl: "",
+    search: "Java introduction tutorial beginners Telusko",
     duration: "20-30 minutes",
+    description: "",
   },
 
   "java-jdk-jre-jvm": {
-    search:
-      "Java JDK JRE JVM explained Telusko",
+    videoUrl: "",
+    search: "Java JDK JRE JVM explained Telusko",
     duration: "20-30 minutes",
+    description: "",
   },
 
   "java-variables": {
-    search:
-      "Java variables tutorial Telusko",
+    videoUrl: "https://www.youtube.com/embed/ghCbURMWBD8?controls=0",
+    search: "Java variables tutorial Telusko",
     duration: "20-30 minutes",
+    description: "",
   },
 
   "java-data-types": {
-    search:
-      "Java data types tutorial Telusko",
+    videoUrl: "",
+    search: "Java data types tutorial Telusko",
     duration: "20-30 minutes",
+    description: "",
   },
 
   "java-operators": {
-    search:
-      "Java operators tutorial Telusko",
+    videoUrl: "",
+    search: "Java operators tutorial Telusko",
     duration: "20-30 minutes",
+    description: "",
   },
 
   "java-conditions": {
-    search:
-      "Java if else conditional statements tutorial Telusko",
+    videoUrl: "",
+    search: "Java if else conditional statements tutorial Telusko",
     duration: "20-30 minutes",
+    description: "",
   },
 
   "java-loops": {
-    search:
-      "Java loops for while do while tutorial Telusko",
+    videoUrl: "",
+    search: "Java loops for while do while tutorial Telusko",
     duration: "20-30 minutes",
+    description: "",
   },
 
   "java-arrays": {
-    search:
-      "Java arrays tutorial interview questions Telusko",
+    videoUrl: "",
+    search: "Java arrays tutorial interview questions Telusko",
     duration: "20-30 minutes",
+    description: "",
   },
 
   "java-strings": {
-    search:
-      "Java strings tutorial interview questions Telusko",
+    videoUrl: "",
+    search: "Java strings tutorial interview questions Telusko",
     duration: "20-30 minutes",
+    description: "",
   },
 
   "java-methods": {
-    search:
-      "Java methods tutorial Telusko",
+    videoUrl: "",
+    search: "Java methods tutorial Telusko",
     duration: "20-30 minutes",
+    description: "",
   },
 
   "java-oops": {
-    search:
-      "Java OOP concepts tutorial Telusko",
+    videoUrl: "",
+    search: "Java OOP concepts tutorial Telusko",
     duration: "20-30 minutes",
+    description: "",
   },
+
 };
