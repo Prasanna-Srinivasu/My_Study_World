@@ -11,12 +11,10 @@ import "./Home.css";
 function Home() {
   const navigate = useNavigate();
 
-  // Courses coming from Spring Boot
   const [courses, setCourses] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
-  // Fetch courses from backend
   useEffect(() => {
     async function loadCourses() {
       try {
@@ -33,6 +31,10 @@ function Home() {
     loadCourses();
   }, []);
 
+  /* -------------------------------------------------------
+     STUDY PROGRESS
+     ------------------------------------------------------- */
+
   const studyProgress = JSON.parse(
     localStorage.getItem("studyProgress") || "{}"
   );
@@ -48,49 +50,59 @@ function Home() {
       ? Math.round((completedTopics / totalTopics) * 100)
       : 0;
 
+  /* -------------------------------------------------------
+     COURSE DATA
+     ------------------------------------------------------- */
+
   const courseNameMap = {
-  1: "java-full-stack",
-  2: "spring-boot",
-  3: "react",
-  4: "sql",
-  5: "dsa",
-};
-
-const coursesWithData = courses.map((course) => {
-  const mappedCourseId =
-    courseNameMap[course.id] || course.id;
-
-  const courseTopics = topics.filter(
-    (topic) =>
-      String(topic.courseId) === String(mappedCourseId)
-  );
-
-  const completed =
-    studyProgress[mappedCourseId]?.length || 0;
-
-  const progress =
-    courseTopics.length > 0
-      ? Math.round(
-          (completed / courseTopics.length) * 100
-        )
-      : 0;
-
-  return {
-    ...course,
-    topics: courseTopics.length,
-    progress,
+    1: "java-full-stack",
+    2: "spring-boot",
+    3: "react",
+    4: "sql",
+    5: "dsa",
   };
-});
+
+  const coursesWithData = courses.map((course) => {
+    const mappedCourseId =
+      courseNameMap[course.id] || course.id;
+
+    const courseTopics = topics.filter(
+      (topic) =>
+        String(topic.courseId) === String(mappedCourseId)
+    );
+
+    const completed =
+      studyProgress[mappedCourseId]?.length || 0;
+
+    const progress =
+      courseTopics.length > 0
+        ? Math.round(
+            (completed / courseTopics.length) * 100
+          )
+        : 0;
+
+    return {
+      ...course,
+      topics: courseTopics.length,
+      progress,
+    };
+  });
+
+  /* -------------------------------------------------------
+     ACTIONS
+     ------------------------------------------------------- */
 
   const handleCourseClick = (course) => {
     navigate(`/course/${course.id}`);
   };
 
   return (
-    <div className="home-page">
+    <main className="home-page">
       <div className="page-container">
 
-        {/* HERO */}
+        {/* =================================================
+            HERO
+            ================================================= */}
 
         <section className="home-hero surface-3d">
 
@@ -109,20 +121,25 @@ const coursesWithData = courses.map((course) => {
             <p>
               Learn programming through interactive
               topics, visual explanations, videos,
-              practice questions, interview preparation
+              practice questions, interview preparation,
               and real coding challenges.
             </p>
 
             <button
+              type="button"
               className="home-start-btn"
               onClick={() => navigate("/learn")}
             >
-              Start Learning →
+              Start Learning
+              <span aria-hidden="true"> →</span>
             </button>
 
           </div>
 
-          <div className="home-hero-visual">
+          <div
+            className="home-hero-visual"
+            aria-hidden="true"
+          >
             <div className="hero-orb">
               💻
             </div>
@@ -130,37 +147,65 @@ const coursesWithData = courses.map((course) => {
 
         </section>
 
-        {/* STATS */}
 
-        <section className="home-stats">
+        {/* =================================================
+            STATS
+            ================================================= */}
+
+        <section
+          className="home-stats"
+          aria-label="Study statistics"
+        >
 
           <div className="home-stat-card surface-3d">
-            <span>📚</span>
-            <strong>{courses.length}</strong>
+            <span aria-hidden="true">📚</span>
+
+            <strong>
+              {courses.length}
+            </strong>
+
             <p>Courses</p>
           </div>
 
+
           <div className="home-stat-card surface-3d">
-            <span>🧠</span>
-            <strong>{totalTopics}</strong>
+            <span aria-hidden="true">🧠</span>
+
+            <strong>
+              {totalTopics}
+            </strong>
+
             <p>Total Topics</p>
           </div>
 
+
           <div className="home-stat-card surface-3d">
-            <span>✓</span>
-            <strong>{completedTopics}</strong>
+            <span aria-hidden="true">✓</span>
+
+            <strong>
+              {completedTopics}
+            </strong>
+
             <p>Completed</p>
           </div>
 
+
           <div className="home-stat-card surface-3d">
-            <span>📈</span>
-            <strong>{overallProgress}%</strong>
+            <span aria-hidden="true">📈</span>
+
+            <strong>
+              {overallProgress}%
+            </strong>
+
             <p>Overall Progress</p>
           </div>
 
         </section>
 
-        {/* COURSES */}
+
+        {/* =================================================
+            COURSES
+            ================================================= */}
 
         <section className="home-courses">
 
@@ -171,7 +216,9 @@ const coursesWithData = courses.map((course) => {
                 YOUR COURSES
               </span>
 
-              <h2>Continue Learning</h2>
+              <h2>
+                Continue Learning
+              </h2>
 
               <p>
                 Pick a course and continue your
@@ -179,24 +226,34 @@ const coursesWithData = courses.map((course) => {
               </p>
             </div>
 
+
             <button
-              onClick={() => navigate("/learn")}
+              type="button"
               className="view-all-btn"
+              onClick={() => navigate("/learn")}
             >
-              View All →
+              View All
+              <span aria-hidden="true"> →</span>
             </button>
 
           </div>
 
+
           <div className="home-courses-grid">
 
             {loading && (
-              <p>Loading courses...</p>
+              <p>
+                Loading courses...
+              </p>
             )}
 
+
             {!loading && error && (
-              <p>{error}</p>
+              <p>
+                {error}
+              </p>
             )}
+
 
             {!loading &&
               !error &&
@@ -214,7 +271,10 @@ const coursesWithData = courses.map((course) => {
 
         </section>
 
-        {/* FEATURES */}
+
+        {/* =================================================
+            LEARNING EXPERIENCE
+            ================================================= */}
 
         <section className="home-features">
 
@@ -225,47 +285,85 @@ const coursesWithData = courses.map((course) => {
                 LEARNING EXPERIENCE
               </span>
 
-              <h2>Everything You Need</h2>
+              <h2>
+                Everything You Need
+              </h2>
             </div>
 
           </div>
 
+
           <div className="home-feature-grid">
 
             <div className="home-feature-card surface-3d">
-              <span>🎯</span>
-              <h3>Topic-Based Learning</h3>
+
+              <span aria-hidden="true">
+                🎯
+              </span>
+
+              <h3>
+                Topic-Based Learning
+              </h3>
+
               <p>
                 Follow a structured learning path
                 one topic at a time.
               </p>
+
             </div>
 
+
             <div className="home-feature-card surface-3d">
-              <span>🎬</span>
-              <h3>Visual Learning</h3>
+
+              <span aria-hidden="true">
+                🎬
+              </span>
+
+              <h3>
+                Visual Learning
+              </h3>
+
               <p>
                 Learn concepts through visuals,
                 diagrams and topic-specific videos.
               </p>
+
             </div>
 
+
             <div className="home-feature-card surface-3d">
-              <span>💻</span>
-              <h3>Practice & Coding</h3>
+
+              <span aria-hidden="true">
+                💻
+              </span>
+
+              <h3>
+                Practice & Coding
+              </h3>
+
               <p>
                 Test your knowledge and solve
                 real coding problems.
               </p>
+
             </div>
 
+
             <div className="home-feature-card surface-3d">
-              <span>🎤</span>
-              <h3>Interview Preparation</h3>
+
+              <span aria-hidden="true">
+                🎤
+              </span>
+
+              <h3>
+                Interview Preparation
+              </h3>
+
               <p>
                 Practice interview questions and
                 prepare for real developer roles.
               </p>
+
             </div>
 
           </div>
@@ -273,7 +371,7 @@ const coursesWithData = courses.map((course) => {
         </section>
 
       </div>
-    </div>
+    </main>
   );
 }
 

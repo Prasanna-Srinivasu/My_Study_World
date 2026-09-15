@@ -36,21 +36,13 @@ function CoursePage() {
     loadCourse();
   }, [courseId]);
 
-  /*
-   * Backend course IDs:
-   * 1 → Java
-   * 2 → Spring Boot
-   * 3 → React
-   * 4 → SQL
-   * 5 → DSA
-   */
- const courseNameMap = {
-  1: "java-full-stack",
-  2: "spring-boot",
-  3: "react",
-  4: "sql",
-  5: "dsa",
-};
+  const courseNameMap = {
+    1: "java-full-stack",
+    2: "spring-boot",
+    3: "react",
+    4: "sql",
+    5: "dsa",
+  };
 
   const courseTopics = topics.filter((topic) => {
     return (
@@ -60,130 +52,204 @@ function CoursePage() {
     );
   });
 
-  const handleTopicClick = (topic) => {
-    navigate(`/topic/${courseId}/${topic.id}`);
-  };
+  const savedProgress = JSON.parse(
+    localStorage.getItem("studyProgress") || "{}"
+  );
+
+  const completedTopics =
+    savedProgress[courseId]?.length || 0;
+
+  const courseProgress =
+    courseTopics.length > 0
+      ? Math.round(
+          (completedTopics / courseTopics.length) * 100
+        )
+      : 0;
 
   if (loading) {
     return (
-      <div className="course-page page-container">
-        <h2>Loading course...</h2>
-      </div>
+      <main className="course-page">
+        <div className="course-container">
+          <section className="course-message surface-3d">
+            <span className="course-message-label">
+              MY STUDY WORLD
+            </span>
+
+            <h2>Loading course...</h2>
+
+            <p>
+              Preparing your learning path.
+            </p>
+          </section>
+        </div>
+      </main>
     );
   }
 
   if (!course) {
     return (
-      <div className="course-page page-container">
-        <h1 className="page-title">Course Not Found</h1>
+      <main className="course-page">
+        <div className="course-container">
+          <section className="course-message course-message-error surface-3d">
+            <span className="course-message-label">
+              COURSE NOT FOUND
+            </span>
 
-        <p className="page-subtitle">
-          The requested course could not be found.
-        </p>
+            <h1>We couldn't find this course.</h1>
 
-        <button
-          className="course-back-button"
-          onClick={() => navigate("/learn")}
-        >
-          ← Back to Learn
-        </button>
-      </div>
+            <p>
+              The course you're looking for may no longer
+              be available.
+            </p>
+
+            <button
+              type="button"
+              className="course-back-button"
+              onClick={() => navigate("/learn")}
+            >
+              <span aria-hidden="true">←</span>
+              Back to Learn
+            </button>
+          </section>
+        </div>
+      </main>
     );
   }
 
   return (
-    <div className="course-page page-container">
+    <main className="course-page">
+      <div className="course-container">
 
-      {/* Back */}
-      <button
-        className="course-back-button"
-        onClick={() => navigate("/learn")}
-      >
-        ← Back to Learn
-      </button>
+        <button
+          type="button"
+          className="course-back-button"
+          onClick={() => navigate("/learn")}
+        >
+          <span aria-hidden="true">←</span>
+          Back to Learn
+        </button>
 
-      {/* Course Header */}
-      <section className="course-header surface-3d">
+        <section className="course-hero surface-3d">
+          <div className="course-hero-main">
 
-        <div className="course-header-icon">
-          {course.icon || "📚"}
-        </div>
+            <div className="course-hero-icon">
+              {course.icon || "📚"}
+            </div>
 
-        <div className="course-header-content">
+            <div className="course-hero-content">
 
-          <span className="course-header-level">
-            {course.level || "Beginner"}
-          </span>
+              <span className="course-level">
+                {course.level || "Beginner"}
+              </span>
 
-          <h1>
-            {course.title || course.name}
-          </h1>
+              <span className="course-eyebrow">
+                COURSE {String(course.id).padStart(2, "0")}
+              </span>
 
-          <p>
-            {course.description ||
-              "Learn this course step by step."}
-          </p>
+              <h1>
+                {course.title || course.name}
+              </h1>
 
-          <div className="course-header-meta">
-            <span>
-              {courseTopics.length} Topics
-            </span>
+              <p>
+                {course.description ||
+                  "Learn this course step by step through structured lessons, practice, and real-world preparation."}
+              </p>
 
-            <span>•</span>
+              <div className="course-meta">
+                <span>
+                  <strong>{courseTopics.length}</strong>
+                  {" "}Topics
+                </span>
 
-            <span>
-              Learning Path
-            </span>
+                <span className="course-meta-divider">
+                  •
+                </span>
+
+                <span>
+                  Structured Learning Path
+                </span>
+              </div>
+
+            </div>
           </div>
 
-        </div>
-      </section>
+          <div className="course-progress-card">
+            <div className="course-progress-top">
+              <span>Your Progress</span>
 
-      {/* Learning Path */}
-      <section className="course-topics-section">
+              <strong>
+                {courseProgress}%
+              </strong>
+            </div>
 
-        <div className="section-heading">
-
-          <div>
-            <span className="section-number">
-              01
-            </span>
-
-            <h2>
-              Learning Path
-            </h2>
-          </div>
-
-          <p>
-            Follow the topics in order and build
-            your knowledge step by step.
-          </p>
-
-        </div>
-
-        {courseTopics.length > 0 ? (
-          <LearningMap
-            topics={courseTopics}
-            onTopicClick={handleTopicClick}
-          />
-        ) : (
-          <div className="empty-topics surface-3d">
-
-            <h3>
-              No topics available yet
-            </h3>
+            <div className="course-progress-track">
+              <div
+                className="course-progress-fill"
+                style={{
+                  width: `${courseProgress}%`,
+                }}
+              />
+            </div>
 
             <p>
-              Topics for this course will be
-              added soon.
+              {completedTopics} of{" "}
+              {courseTopics.length} topics completed
             </p>
-
           </div>
-        )}
+        </section>
 
-      </section>
+        <section className="course-learning-section">
 
-    </div>
+          <div className="course-section-heading">
+            <div>
+              <span className="course-section-label">
+                YOUR PATH
+              </span>
+
+              <h2>
+                Learning Path
+              </h2>
+            </div>
+
+            <p>
+              Follow each topic in order. Complete one
+              lesson and unlock the next step.
+            </p>
+          </div>
+
+          {courseTopics.length > 0 ? (
+            <LearningMap
+              topics={courseTopics}
+            />
+          ) : (
+            <div className="course-empty-topics surface-3d">
+              <div className="course-empty-icon">
+                📚
+              </div>
+
+              <h3>
+                No topics available yet
+              </h3>
+
+              <p>
+                Topics for this course will be added soon.
+              </p>
+            </div>
+          )}
+
+        </section>
+
+        <section className="course-bottom-note">
+          <span>MY STUDY WORLD</span>
+
+          <p>
+            Learn one concept at a time. Practice what
+            you learn. Build something real.
+          </p>
+        </section>
+
+      </div>
+    </main>
   );
 }
 

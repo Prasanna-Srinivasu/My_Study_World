@@ -1,18 +1,34 @@
 import "./CourseCard.css";
 
 function CourseCard({ course, onClick }) {
+  const progress = course.progress || 0;
+
   return (
-    <div
+    <article
       className="course-card"
       onClick={() => onClick(course)}
+      role="button"
+      tabIndex={0}
+      onKeyDown={(event) => {
+        if (event.key === "Enter" || event.key === " ") {
+          event.preventDefault();
+          onClick(course);
+        }
+      }}
     >
       <div className="course-card-content">
-        <div className="course-icon">
+
+        {/* Course Icon */}
+        <div className="course-card-icon">
           {course.icon || "📚"}
         </div>
 
+
+        {/* Course Information */}
         <div className="course-info">
-          <h2>{course.name || course.title}</h2>
+          <h2>
+            {course.name || course.title}
+          </h2>
 
           <p>
             {course.description ||
@@ -20,36 +36,72 @@ function CourseCard({ course, onClick }) {
           </p>
         </div>
 
-        <div className="course-stats">
-          <span>
+
+        {/* Course Statistics */}
+        <div className="course-card-meta">
+
+          <span className="course-card-topics">
             📖 {course.topics || 0} Topics
           </span>
 
-          <span>
-            📊 {course.progress || 0}% Complete
+          <span className="course-card-progress-text">
+            {progress}% Complete
           </span>
+
         </div>
 
-        <div className="progress-bar">
-          <div
-            className="progress-fill"
-            style={{
-              width: `${course.progress || 0}%`,
-            }}
-          />
+
+        {/* Progress */}
+        <div className="course-card-progress">
+
+          <div className="course-card-progress-header">
+            <span>Course Progress</span>
+
+            <strong>
+              {progress}%
+            </strong>
+          </div>
+
+          <div className="course-card-progress-bar">
+            <div
+              className="course-card-progress-fill"
+              style={{
+                width: `${progress}%`,
+              }}
+            />
+          </div>
+
         </div>
 
+
+        {/* Action */}
+        <div className="course-card-action">
+
+          <span>
+            View Course
+          </span>
+
+          <span aria-hidden="true">
+            →
+          </span>
+
+        </div>
+
+
+        {/* Invisible button for compatibility with
+            existing interaction behavior */}
         <button
-          className="view-course-btn"
+          type="button"
+          className="course-card-click-target"
+          aria-label={`View ${course.name || course.title || "course"}`}
           onClick={(event) => {
             event.stopPropagation();
             onClick(course);
           }}
-        >
-          View Course →
-        </button>
+        />
+
       </div>
-    </div>
+    </article>
   );
 }
 

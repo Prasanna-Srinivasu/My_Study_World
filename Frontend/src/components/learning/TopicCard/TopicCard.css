@@ -1,62 +1,58 @@
 .topic-card {
+  position: relative;
+
   width: 100%;
-  min-height: 90px;
+  min-height: 104px;
 
   display: flex;
   align-items: center;
   gap: 18px;
 
-  padding: 18px 22px;
+  padding: 20px 24px;
 
-  background: linear-gradient(
-    145deg,
-    rgba(46, 57, 68, 0.98),
-    rgba(33, 42, 49, 0.98)
-  );
+  overflow: hidden;
 
-  border: 1px solid rgba(211, 217, 212, 0.08);
-  border-radius: var(--small-radius);
+  border: 1px solid rgba(123, 28, 65, 0.1);
+  border-radius: 20px;
 
-  box-shadow: var(--shadow-3d);
+  background: #ffffff;
+
+  box-shadow:
+    0 10px 28px rgba(123, 28, 65, 0.06);
 
   transition:
     transform 0.3s ease,
     border-color 0.3s ease,
-    box-shadow 0.3s ease;
+    box-shadow 0.3s ease,
+    background 0.3s ease;
 }
 
-.topic-current {
-  cursor: pointer;
-  border-color: rgba(47, 120, 150, 0.45);
+.topic-card::before {
+  content: "";
+
+  position: absolute;
+
+  left: 0;
+  top: 0;
+  bottom: 0;
+
+  width: 4px;
+
+  background: #e6d1ae;
+
+  transition:
+    background 0.3s ease,
+    width 0.3s ease;
 }
 
-.topic-current:hover {
-  transform: translateY(-4px);
-
-  border-color: var(--blue-light);
-
-  box-shadow:
-    0 15px 30px rgba(0, 0, 0, 0.4),
-    0 0 20px rgba(18, 78, 102, 0.25);
-}
-
-.topic-completed {
-  cursor: pointer;
-  border-color: rgba(47, 120, 150, 0.25);
-}
-
-.topic-completed:hover {
-  transform: translateY(-3px);
-}
-
-.topic-locked {
-  opacity: 0.55;
-  cursor: not-allowed;
-}
+/* NUMBER */
 
 .topic-card-number {
-  width: 48px;
-  height: 48px;
+  position: relative;
+  z-index: 2;
+
+  width: 52px;
+  height: 52px;
 
   flex-shrink: 0;
 
@@ -64,51 +60,293 @@
   align-items: center;
   justify-content: center;
 
-  border-radius: 14px;
+  border: 1px solid #e6d1ae;
+  border-radius: 16px;
 
-  background: rgba(18, 78, 102, 0.35);
+  background: #fdfbf7;
 
-  color: var(--blue-light);
+  color: #7b1c41;
 
-  font-size: 14px;
+  font-family:
+    Georgia,
+    "Times New Roman",
+    serif;
+
+  font-size: 15px;
   font-weight: 700;
+
+  transition:
+    background 0.3s ease,
+    border-color 0.3s ease,
+    color 0.3s ease,
+    transform 0.3s ease;
 }
 
+/* CONTENT */
+
 .topic-card-content {
+  position: relative;
+  z-index: 2;
+
   flex: 1;
+  min-width: 0;
+}
+
+.topic-card-kicker {
+  display: block;
+
+  margin-bottom: 5px;
+
+  color: #87945f;
+
+  font-size: 8px;
+  font-weight: 800;
+  letter-spacing: 1.5px;
 }
 
 .topic-card-content h3 {
-  margin: 0 0 6px;
+  margin: 0 0 7px;
 
-  color: var(--white);
+  color: #7b1c41;
 
-  font-size: 17px;
+  font-family:
+    Georgia,
+    "Times New Roman",
+    serif;
+
+  font-size: 19px;
+  font-weight: 700;
   line-height: 1.3;
 }
 
 .topic-status {
-  color: var(--text-secondary);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
 
-  font-size: 12px;
+  color: #7b1c41;
+  opacity: 0.58;
+
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.topic-status-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 16px;
+  height: 16px;
+
+  border-radius: 50%;
+
+  background: #e6d1ae;
+
+  color: #7b1c41;
+
+  font-size: 10px;
+  font-weight: 800;
+}
+
+/* ARROW */
+
+.topic-card-arrow {
+  position: relative;
+  z-index: 2;
+
+  flex-shrink: 0;
+
+  color: #7b1c41;
+
+  font-size: 24px;
+  line-height: 1;
+
+  transition:
+    transform 0.3s ease,
+    color 0.3s ease;
+}
+
+/* CURRENT */
+
+.topic-current {
+  cursor: pointer;
+
+  border-color: rgba(123, 28, 65, 0.22);
+
+  background:
+    linear-gradient(
+      105deg,
+      #ffffff 0%,
+      #fdfbf7 72%,
+      #f3b6b8 150%
+    );
+
+  box-shadow:
+    0 14px 34px rgba(123, 28, 65, 0.1);
+}
+
+.topic-current::before {
+  width: 5px;
+  background: #7b1c41;
+}
+
+.topic-current .topic-card-number {
+  border-color: #7b1c41;
+  background: #7b1c41;
+  color: #ffffff;
 }
 
 .topic-current .topic-status {
-  color: var(--blue-light);
+  color: #7b1c41;
+  opacity: 1;
+}
+
+.topic-current .topic-status::before {
+  content: "";
+
+  width: 6px;
+  height: 6px;
+
+  border-radius: 50%;
+
+  background: #87945f;
+}
+
+/* CURRENT HOVER */
+
+.topic-current:hover {
+  transform: translateY(-4px);
+
+  border-color: #7b1c41;
+
+  box-shadow:
+    0 20px 42px rgba(123, 28, 65, 0.14);
+}
+
+.topic-current:hover .topic-card-number {
+  transform: translateY(-2px);
+}
+
+.topic-current:hover .topic-card-arrow {
+  transform: translateX(6px);
+}
+
+/* COMPLETED */
+
+.topic-completed {
+  cursor: pointer;
+
+  border-color: rgba(135, 148, 95, 0.28);
+}
+
+.topic-completed::before {
+  background: #87945f;
+}
+
+.topic-completed .topic-card-number {
+  border-color: #87945f;
+  background: #87945f;
+  color: #ffffff;
 }
 
 .topic-completed .topic-status {
-  color: var(--text-primary);
+  color: #87945f;
+  opacity: 1;
 }
 
-.topic-card-arrow {
-  color: var(--blue-light);
-  font-size: 24px;
-
-  transition: transform 0.3s ease;
+.topic-completed .topic-status-icon {
+  background: #87945f;
+  color: #ffffff;
 }
 
-.topic-current:hover .topic-card-arrow,
+.topic-completed:hover {
+  transform: translateY(-3px);
+
+  border-color: #87945f;
+
+  box-shadow:
+    0 16px 34px rgba(135, 148, 95, 0.12);
+}
+
 .topic-completed:hover .topic-card-arrow {
   transform: translateX(5px);
+}
+
+/* LOCKED */
+
+.topic-locked {
+  cursor: not-allowed;
+
+  opacity: 0.58;
+
+  background: #fdfbf7;
+
+  box-shadow:
+    0 5px 16px rgba(123, 28, 65, 0.03);
+}
+
+.topic-locked::before {
+  background: #e6d1ae;
+}
+
+.topic-locked .topic-card-number {
+  background: #ffffff;
+  color: #7b1c41;
+}
+
+.topic-locked .topic-status {
+  color: #7b1c41;
+  opacity: 0.48;
+}
+
+.topic-locked .topic-card-arrow {
+  color: #7b1c41;
+  opacity: 0.35;
+}
+
+/* FOCUS */
+
+.topic-card:focus-visible {
+  outline: 3px solid #f3b6b8;
+  outline-offset: 4px;
+}
+
+/* MOBILE */
+
+@media (max-width: 600px) {
+  .topic-card {
+    min-height: 94px;
+
+    gap: 13px;
+
+    padding: 17px 16px;
+
+    border-radius: 17px;
+  }
+
+  .topic-card-number {
+    width: 44px;
+    height: 44px;
+
+    border-radius: 13px;
+
+    font-size: 13px;
+  }
+
+  .topic-card-content h3 {
+    font-size: 16px;
+  }
+
+  .topic-card-kicker {
+    font-size: 7px;
+  }
+
+  .topic-status {
+    font-size: 10px;
+  }
+
+  .topic-card-arrow {
+    font-size: 20px;
+  }
 }

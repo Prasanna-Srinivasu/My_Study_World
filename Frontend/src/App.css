@@ -1,69 +1,86 @@
-/* ================================
-   MY STUDY WORLD - APP LAYOUT
-================================ */
+/* =========================================
+   MY STUDY WORLD — APP LAYOUT
+========================================= */
 
 .app {
   min-height: 100vh;
+
   background:
     radial-gradient(
-      circle at 15% 20%,
-      rgba(18, 78, 102, 0.22),
-      transparent 35%
+      circle at 8% 10%,
+      rgba(233, 182, 163, 0.28),
+      transparent 28%
     ),
     radial-gradient(
-      circle at 85% 80%,
-      rgba(47, 120, 150, 0.12),
-      transparent 30%
+      circle at 92% 25%,
+      rgba(191, 216, 200, 0.25),
+      transparent 25%
+    ),
+    radial-gradient(
+      circle at 70% 90%,
+      rgba(184, 212, 223, 0.22),
+      transparent 28%
     ),
     var(--bg-primary);
+
   overflow-x: hidden;
 }
 
 .app-content {
   min-height: calc(100vh - 76px);
+
   margin-left: 230px;
-  padding: 30px;
+
+  padding: 32px;
+
+  animation: pageEnter 450ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-@media (max-width: 768px) {
-  .app-content {
-    margin-left: 70px;
-    padding: 20px;
-  }
-}
-
-/* 3D surface used across the application */
+/* =========================================
+   COMMON SURFACE
+========================================= */
 
 .surface-3d {
-  background: linear-gradient(
-    145deg,
-    rgba(46, 57, 68, 0.96),
-    rgba(33, 42, 49, 0.96)
-  );
-  border: 1px solid rgba(211, 217, 212, 0.08);
+  background:
+    linear-gradient(
+      145deg,
+      rgba(255, 253, 251, 0.96),
+      rgba(255, 249, 243, 0.92)
+    );
+
+  border: 1px solid var(--border);
+
   border-radius: var(--card-radius);
-  box-shadow: var(--shadow-3d);
+
+  box-shadow: var(--shadow-soft);
+
   transition:
     transform var(--transition),
-    box-shadow var(--transition);
+    box-shadow var(--transition),
+    border-color var(--transition);
 }
 
 .surface-3d:hover {
   transform: translateY(-4px);
-  box-shadow:
-    0 20px 40px rgba(0, 0, 0, 0.4),
-    inset 0 1px 1px rgba(255, 255, 255, 0.08);
+
+  box-shadow: var(--shadow-card);
+
+  border-color: rgba(122, 48, 48, 0.18);
 }
 
-/* Blue glowing accent */
+/* =========================================
+   WINE GLOW
+========================================= */
 
 .blue-glow {
   box-shadow:
-    0 0 0 1px rgba(18, 78, 102, 0.5),
-    0 12px 30px rgba(18, 78, 102, 0.25);
+    0 0 0 1px rgba(122, 48, 48, 0.12),
+    0 15px 35px rgba(122, 48, 48, 0.12);
 }
 
-/* Page container */
+/* =========================================
+   PAGE
+========================================= */
 
 .page-container {
   width: 100%;
@@ -71,29 +88,37 @@
   margin: 0 auto;
 }
 
-/* Common page heading */
-
 .page-title {
-  font-size: 32px;
-  font-weight: 700;
-  color: var(--white);
+  font-size: clamp(28px, 4vw, 38px);
+
+  font-weight: 800;
+
+  color: var(--wine);
+
   margin-bottom: 8px;
+
+  letter-spacing: -0.025em;
 }
 
 .page-subtitle {
   color: var(--text-secondary);
+
   font-size: 16px;
-  line-height: 1.6;
+
+  line-height: 1.7;
 }
 
-/* Responsive */
+/* =========================================
+   RESPONSIVE
+========================================= */
 
 @media (max-width: 768px) {
   .app-content {
-    padding: 16px;
+    margin-left: 70px;
+    padding: 20px 16px;
   }
 
   .page-title {
-    font-size: 26px;
+    font-size: 28px;
   }
 }

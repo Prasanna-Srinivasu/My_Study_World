@@ -1,3 +1,7 @@
+/* =========================================
+   STUDY WORLD LIQUID BUTTON
+========================================= */
+
 .liquid-button {
   --mouse-x: 50%;
   --mouse-y: 50%;
@@ -5,29 +9,34 @@
   --move-y: 0px;
 
   position: relative;
+
   width: 100%;
   min-height: 58px;
+
   border: 0;
   border-radius: 18px;
+
   overflow: hidden;
 
   cursor: pointer;
 
-  background: #ffffff;
-  color: #111827;
+  background: var(--wine);
+
+  color: #fff;
 
   font-family: inherit;
-  font-size: 16px;
-  font-weight: 700;
-  letter-spacing: 0.04em;
+  font-size: 15px;
+  font-weight: 800;
+
+  letter-spacing: 0.025em;
 
   box-shadow:
-    0 12px 30px rgba(0, 0, 0, 0.22),
-    inset 0 1px 0 rgba(255, 255, 255, 0.8);
+    0 12px 28px rgba(122, 48, 48, 0.18),
+    inset 0 1px rgba(255, 255, 255, 0.28);
 
   transition:
-    transform 0.25s cubic-bezier(0.22, 1, 0.36, 1),
-    box-shadow 0.25s ease;
+    transform 280ms cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 280ms ease;
 
   isolation: isolate;
 }
@@ -38,8 +47,8 @@
     scale(1.015);
 
   box-shadow:
-    0 18px 40px rgba(0, 0, 0, 0.28),
-    inset 0 1px 0 rgba(255, 255, 255, 0.9);
+    0 18px 38px rgba(122, 48, 48, 0.23),
+    inset 0 1px rgba(255, 255, 255, 0.35);
 }
 
 .liquid-button:active {
@@ -48,15 +57,18 @@
 
 .liquid-button:disabled {
   cursor: not-allowed;
-  opacity: 0.6;
+  opacity: 0.55;
 }
 
-/* Mouse-following liquid blob */
+/* =========================================
+   MAIN LIQUID BLOB
+========================================= */
+
 .liquid-button-blob {
   position: absolute;
 
-  width: 120px;
-  height: 120px;
+  width: 125px;
+  height: 125px;
 
   left: var(--mouse-x);
   top: var(--mouse-y);
@@ -67,14 +79,14 @@
 
   border-radius: 50%;
 
-  background: #7c6cff;
+  background: var(--wine-soft);
 
   filter: blur(2px);
 
   transition:
-    transform 0.45s cubic-bezier(0.22, 1, 0.36, 1),
-    left 0.12s ease-out,
-    top 0.12s ease-out;
+    transform 450ms cubic-bezier(0.22, 1, 0.36, 1),
+    left 120ms ease-out,
+    top 120ms ease-out;
 
   z-index: -1;
 }
@@ -85,32 +97,37 @@
     scale(2.8);
 }
 
-/* Second soft blob creates the gooey feeling */
+/* =========================================
+   SOFT SECONDARY BLOB
+========================================= */
+
 .liquid-button::before {
   content: "";
 
   position: absolute;
 
-  width: 70px;
-  height: 70px;
+  width: 75px;
+  height: 75px;
 
   left: var(--mouse-x);
   top: var(--mouse-y);
 
-  transform: translate(-50%, -50%) scale(0);
+  transform:
+    translate(-50%, -50%)
+    scale(0);
 
   border-radius: 50%;
 
-  background: #a78bfa;
+  background: var(--peach);
 
   filter: blur(18px);
 
-  opacity: 0.8;
+  opacity: 0.65;
 
   transition:
-    transform 0.5s cubic-bezier(0.22, 1, 0.36, 1),
-    left 0.18s ease-out,
-    top 0.18s ease-out;
+    transform 500ms cubic-bezier(0.22, 1, 0.36, 1),
+    left 180ms ease-out,
+    top 180ms ease-out;
 
   z-index: -1;
 }
@@ -121,12 +138,17 @@
     scale(3);
 }
 
+/* =========================================
+   CONTENT
+========================================= */
+
 .liquid-button-content {
   position: relative;
 
   display: flex;
   align-items: center;
   justify-content: center;
+
   gap: 12px;
 
   width: 100%;
@@ -135,29 +157,39 @@
   z-index: 2;
 
   transition:
-    color 0.25s ease,
-    letter-spacing 0.25s ease;
+    color 250ms ease,
+    letter-spacing 250ms ease;
 }
 
 .liquid-button:hover .liquid-button-content {
-  color: #ffffff;
-  letter-spacing: 0.07em;
+  color: #fff;
+
+  letter-spacing: 0.06em;
 }
+
+/* =========================================
+   ARROW
+========================================= */
 
 .liquid-button-arrow {
   display: inline-flex;
+
   align-items: center;
   justify-content: center;
 
   font-size: 20px;
 
   transition:
-    transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+    transform 350ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .liquid-button:hover .liquid-button-arrow {
   transform: translateX(5px);
 }
+
+/* =========================================
+   ACCESSIBILITY
+========================================= */
 
 @media (prefers-reduced-motion: reduce) {
   .liquid-button,

@@ -7,230 +7,315 @@ import { videos } from "../../data/videos";
 import "./VideoPage.css";
 
 function VideoPage() {
-    const { courseId, topicId } = useParams();
-    const navigate = useNavigate();
+  const { courseId, topicId } = useParams();
+  const navigate = useNavigate();
 
-    const [videoCompleted, setVideoCompleted] = useState(false);
-    const [videoDescription, setVideoDescription] = useState("");
-    const [descriptionLoading, setDescriptionLoading] = useState(false);
-    const topic = topics.find(
-        (item) =>
-            String(item.id) === String(topicId) &&
-            String(item.courseId) === String(courseId)
+  const [videoCompleted, setVideoCompleted] = useState(false);
+  const [videoDescription, setVideoDescription] = useState("");
+  const [descriptionLoading, setDescriptionLoading] =
+    useState(false);
+
+  const topic = topics.find(
+    (item) =>
+      String(item.id) === String(topicId) &&
+      String(item.courseId) === String(courseId)
+  );
+
+  const video = videos[topicId];
+
+  useEffect(() => {
+    const savedVideoProgress = JSON.parse(
+      localStorage.getItem("videoProgress") || "{}"
     );
 
-    const video = videos[topicId];
+    const completed =
+      savedVideoProgress[courseId]?.[topicId] === true;
 
-    useEffect(() => {
-        const savedVideoProgress = JSON.parse(
-            localStorage.getItem("videoProgress") || "{}"
-        );
-        useEffect(() => {
-            if (!video?.videoUrl) return;
+    setVideoCompleted(completed);
+  }, [courseId, topicId]);
 
-            const generateDescription = async () => {
-                try {
-                    setDescriptionLoading(true);
-
-                    const response = await fetch(
-                        "http://localhost:8080/api/video/description",
-                        {
-                            method: "POST",
-                            headers: {
-                                "Content-Type": "application/json",
-                            },
-                            body: JSON.stringify({
-                                videoUrl: video.videoUrl,
-                            }),
-                        }
-                    );
-
-                    const data = await response.json();
-
-                    if (data.success) {
-                        setVideoDescription(data.description || data.message || "");
-                    }
-                } catch (error) {
-                    console.error("Video description error:", error);
-                } finally {
-                    setDescriptionLoading(false);
-                }
-            };
-
-            generateDescription();
-        }, [video]);
-
-        const completed =
-            savedVideoProgress[courseId]?.[topicId] === true;
-
-        setVideoCompleted(completed);
-    }, [courseId, topicId]);
-
-    const markVideoComplete = () => {
-        const savedVideoProgress = JSON.parse(
-            localStorage.getItem("videoProgress") || "{}"
-        );
-
-        if (!savedVideoProgress[courseId]) {
-            savedVideoProgress[courseId] = {};
-        }
-
-        savedVideoProgress[courseId][topicId] = true;
-
-        localStorage.setItem(
-            "videoProgress",
-            JSON.stringify(savedVideoProgress)
-        );
-
-        setVideoCompleted(true);
-    };
-
-    if (!topic || !video) {
-        return (
-            <div className="video-page">
-                <div className="video-error">
-                    <h1>Video Not Found</h1>
-
-                    <p>
-                        The requested video could not be found.
-                    </p>
-
-                    <button
-                        onClick={() =>
-                            navigate(`/topic/${courseId}/${topicId}`)
-                        }
-                    >
-                        ← Back to Topic
-                    </button>
-                </div>
-            </div>
-        );
+  useEffect(() => {
+    if (!video?.videoUrl) {
+      setVideoDescription("");
+      return;
     }
 
+    const generateDescription = async () => {
+      try {
+        setDescriptionLoading(true);
+
+        const response = await fetch(
+          "http://localhost:8080/api/video/description",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              videoUrl: video.videoUrl,
+            }),
+          }
+        );
+
+        const data = await response.json();
+
+        if (data.success) {
+          setVideoDescription(
+            data.description || data.message || ""
+          );
+        }
+      } catch (error) {
+        console.error(
+          "Video description error:",
+          error
+        );
+      } finally {
+        setDescriptionLoading(false);
+      }
+    };
+
+    generateDescription();
+  }, [video]);
+
+  const markVideoComplete = () => {
+    const savedVideoProgress = JSON.parse(
+      localStorage.getItem("videoProgress") || "{}"
+    );
+
+    if (!savedVideoProgress[courseId]) {
+      savedVideoProgress[courseId] = {};
+    }
+
+    savedVideoProgress[courseId][topicId] = true;
+
+    localStorage.setItem(
+      "videoProgress",
+      JSON.stringify(savedVideoProgress)
+    );
+
+    setVideoCompleted(true);
+  };
+
+  if (!topic || !video) {
     return (
-        <div className="video-page">
+      <main className="video-page">
+        <div className="video-container">
+          <section className="video-error surface-3d">
+            <span className="video-error-label">
+              MY STUDY WORLD
+            </span>
 
-            {/* HEADER */}
+            <h1>Video Not Found</h1>
 
-            <div className="video-page-header">
+            <p>
+              The requested video could not be found.
+            </p>
 
-                <button
-                    className="video-back-btn"
-                    onClick={() =>
-                        navigate(`/topic/${courseId}/${topicId}`)
-                    }
-                >
-                    ← Back to Topic
-                </button>
+            <button
+              type="button"
+              className="video-back-btn"
+              onClick={() =>
+                navigate(
+                  `/topic/${courseId}/${topicId}`
+                )
+              }
+            >
+              <span aria-hidden="true">←</span>
+              Back to Topic
+            </button>
+          </section>
+        </div>
+      </main>
+    );
+  }
 
-                <span className="video-topic-badge">
-                    TOPIC VIDEO
+  return (
+    <main className="video-page">
+      <div className="video-container">
+
+        <header className="video-page-header">
+
+          <button
+            type="button"
+            className="video-back-btn"
+            onClick={() =>
+              navigate(
+                `/topic/${courseId}/${topicId}`
+              )
+            }
+          >
+            <span aria-hidden="true">←</span>
+            Back to Topic
+          </button>
+
+          <span className="video-topic-badge">
+            TOPIC VIDEO
+          </span>
+
+          <h1>{topic.title}</h1>
+
+          <p>
+            Watch the explanation, understand the concept,
+            and then continue to practice.
+          </p>
+
+        </header>
+
+        <section className="video-page-card surface-3d">
+
+          <div className="video-page-player-wrapper">
+
+            {video.videoUrl ? (
+              <div className="video-page-player">
+                <iframe
+                  src={video.videoUrl}
+                  title={`${topic.title} video`}
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                  allowFullScreen
+                />
+              </div>
+            ) : (
+              <div className="video-page-coming-soon">
+                <div className="video-play-icon">
+                  ▶
+                </div>
+
+                <span>
+                  VIDEO LESSON
                 </span>
 
-                <h1>{topic.title}</h1>
+                <h2>
+                  Video Coming Soon
+                </h2>
 
                 <p>
-                    Watch the complete explanation before continuing
-                    to the next learning section.
+                  The video for this topic has not been
+                  added yet.
                 </p>
+              </div>
+            )}
 
+          </div>
+
+          <div className="video-page-information">
+
+            <div>
+              <span className="video-label">
+                LEARN WITH VIDEO
+              </span>
+
+              <h2>{topic.title}</h2>
+
+              <p className="video-duration">
+                Recommended duration:{" "}
+                <strong>{video.duration}</strong>
+              </p>
             </div>
 
-            {/* VIDEO */}
+            <div className="video-information-mark">
+              {videoCompleted ? "✓" : "01"}
+            </div>
 
-            <section className="video-page-card">
+          </div>
 
-                {video.videoUrl ? (
-                    <div className="video-page-player">
+          <div className="video-page-description">
 
-                        <iframe
-                            src={video.videoUrl}
-                            title={`${topic.title} video`}
-                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                            allowFullScreen
-                        />
+            <div className="video-description-heading">
+              <span className="video-description-icon">
+                📖
+              </span>
 
-                    </div>
-                ) : (
-                    <div className="video-page-coming-soon">
+              <div>
+                <span>QUICK EXPLANATION</span>
+                <h2>Video Description</h2>
+              </div>
+            </div>
 
-                        <div className="video-play-icon">
-                            ▶
-                        </div>
+            <div className="video-description-body">
+              {descriptionLoading ? (
+                <div className="video-description-loading">
+                  <span className="video-loading-dot" />
+                  <p>
+                    Generating a beginner-friendly
+                    description...
+                  </p>
+                </div>
+              ) : videoDescription ? (
+                <p>{videoDescription}</p>
+              ) : (
+                <p>
+                  Video description is not available yet.
+                </p>
+              )}
+            </div>
 
-                        <h2>Video Coming Soon</h2>
+          </div>
 
-                        <p>
-                            The video for this topic has not been added yet.
-                        </p>
+          <div className="video-page-completion">
 
-                    </div>
-                )}
+            {videoCompleted ? (
+              <div className="video-completion-row">
 
-                {/* VIDEO INFORMATION */}
-
-                <div className="video-page-information">
-
-                    <span className="video-label">
-                        LEARN WITH VIDEO
-                    </span>
-
-                    <h2>{topic.title}</h2>
-
-                    <p className="video-duration">
-                        Recommended duration: {video.duration}
-                    </p>
-
+                <div className="video-completed-message">
+                  <span>✓</span>
+                  Video Completed
                 </div>
 
-                {/* DESCRIPTION */}
+                <button
+                  type="button"
+                  className="video-continue-btn"
+                  onClick={() =>
+                    navigate(
+                      `/topic/${courseId}/${topicId}#practice`
+                    )
+                  }
+                >
+                  Continue to Practice
+                  <span aria-hidden="true">
+                    →
+                  </span>
+                </button>
 
-                <div className="video-page-description">
-                    <h2>📖 Video Description</h2>
+              </div>
+            ) : (
+              <div className="video-completion-row">
 
-                    {descriptionLoading ? (
-                        <p>Generating beginner-friendly description...</p>
-                    ) : videoDescription ? (
-                        <div>{videoDescription}</div>
-                    ) : (
-                        <p>Video description is not available yet.</p>
-                    )}
+                <div className="video-completion-hint">
+                  Finished watching?
                 </div>
 
-                {/* COMPLETION */}
+                <button
+                  type="button"
+                  className="video-complete-btn"
+                  onClick={markVideoComplete}
+                >
+                  Mark Video Complete
+                  <span aria-hidden="true">
+                    ✓
+                  </span>
+                </button>
 
-                <div className="video-page-completion">
+              </div>
+            )}
 
-                    {videoCompleted ? (
-                        <>
-                            <div className="video-completed-message">
-                                ✓ Video Completed
-                            </div>
+          </div>
 
-                            <button
-                                className="video-continue-btn"
-                                onClick={() =>
-                                    navigate(`/topic/${courseId}/${topicId}#practice`)
-                                }
-                            >
-                                Continue to Practice →
-                            </button>
-                        </>
-                    ) : (
-                        <button
-                            className="video-complete-btn"
-                            onClick={markVideoComplete}
-                        >
-                            Mark Video Complete ✓
-                        </button>
-                    )}
+        </section>
 
-                </div>
+        <footer className="video-page-footer">
+          <span>
+            LEARN • PRACTICE • BUILD
+          </span>
 
-            </section>
+          <p>
+            Take your time. Understand the concept.
+            Then put it into practice.
+          </p>
+        </footer>
 
-        </div>
-    );
+      </div>
+    </main>
+  );
 }
 
 export default VideoPage;
